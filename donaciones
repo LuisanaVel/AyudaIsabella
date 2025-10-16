@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ayudemos a Isabella</title>
+  <meta name="description" content="Campaña de ayuda para Isabella - donaciones y actualizaciones." />
+  <style>
+    /* -----------------------
+       Estilo general (pasteles)
+       ----------------------- */
+    :root{
+      --bg:#fffafc;
+      --card:#ffffff;
+      --accent:#f6c8de; /* rosa pastel */
+      --accent-2:#e9d8ff; /* lila claro */
+      --accent-3:#d9f2ff; /* celeste */
+      --muted:#7a7a7a;
+      --cta:#ff7fb3; /* botón donar */
+      --cta-dark:#e16493;
+      --radius:16px;
+      --max-width:900px;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#fff);
+      color:#111;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:24px;
+      display:flex;
+      justify-content:center;
+      font-size:16px;
+    }
+    .wrap{
+      width:100%;
+      max-width:var(--max-width);
+      box-sizing:border-box;
+    }
+
+    /* Header / Hero */
+    header.hero{
+      background: linear-gradient(90deg, rgba(246,200,222,0.35), rgba(233,216,255,0.22));
+      border-radius:var(--radius);
+      padding:20px;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+    .hero .left{
+      flex:1;
+      min-width:0;
+    }
+    .hero h1{
+      margin:0 0 6px 0;
+      font-size:28px;
+      line-height:1.05;
+      color:#3a2b3c;
+    }
+    .hero p.lead{
+      margin:0 0 12px 0;
+      color:var(--muted);
+      font-size:15px;
+    }
+    .hero .cta-row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border:0;
+      cursor:pointer;
+      padding:12px 18px;
+      border-radius:12px;
+      font-weight:600;
+      text-decoration:none;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .btn:active{transform:translateY(1px);}
+    .btn-donar{
+      background:linear-gradient(180deg,var(--cta),var(--cta-dark));
+      color:white;
+      font-size:16px;
+      padding:14px 22px;
+    }
+    .btn-secondary{
+      background:transparent;
+      border:1px solid rgba(0,0,0,0.06);
+      color:#333;
+      font-weight:600;
+      padding:10px 14px;
+      border-radius:10px;
+    }
+
+    .hero .img{
+      width:160px;
+      height:160px;
+      border-radius:14px;
+      overflow:hidden;
+      flex-shrink:0;
+      border:4px solid rgba(255,255,255,0.6);
+      box-shadow:0 8px 30px rgba(0,0,0,0.08);
+    }
+    .hero .img img{width:100%;height:100%;object-fit:cover;display:block;}
+
+    /* Main content */
+    main{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1fr 350px;
+      gap:18px;
+      align-items:start;
+    }
+    @media(max-width:980px){
+      main{grid-template-columns:1fr; padding-bottom:30px;}
+      .hero{flex-direction:column; align-items:flex-start;}
+      .hero .img{width:100%;height:260px;border-radius:12px;}
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      padding:16px;
+      box-shadow: 0 8px 26px rgba(0,0,0,0.04);
+    }
+    .section-title{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+    }
+    .section-title h2{margin:0;font-size:18px}
+    .muted{color:var(--muted);font-size:14px;}
+
+    /* Historia */
+    .history p{line-height:1.6;margin:0 0 12px 0;color:#333;}
+    .media-wrap{display:flex;flex-direction:column;gap:10px}
+    .media-wrap img{width:100%;border-radius:10px;object-fit:cover}
+    video{width:100%;border-radius:10px;background:#000}
+
+    /* Sidebar (donaciones) */
+    aside .card{position:sticky;top:24px}
+    .donation-method{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:12px;
+      border-radius:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.9));
+      border:1px solid rgba(0,0,0,0.03);
+      margin-bottom:12px;
+    }
+    .donation-method .icon{
+      width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;
+      background:var(--accent-2); color:#4a2b6b;font-weight:700;
+      flex-shrink:0;
+    }
+    .donation-method .info{flex:1}
+    .donation-method .info small{display:block;color:var(--muted);margin-bottom:6px}
+    .donation-method .info .data{font-weight:700}
+
+    .copy-row{display:flex;gap:8px;margin-top:8px}
+    .small-btn{font-size:14px;padding:8px 10px;border-radius:10px;border:0;cursor:pointer}
+    .copy-btn{background:#f1f1f1}
+    .whatsapp-btn{background:#dff6ea;color:#045c2d}
+    .mailto{background:#eef3ff;color:#1b3ea6}
+
+    /* Updates */
+    .updates-list{display:flex;flex-direction:column;gap:10px}
+    .update-item{padding:10px;border-radius:10px;background:linear-gradient(90deg, rgba(249,242,255,0.6), rgba(255,245,249,0.6));border:1px solid rgba(0,0,0,0.03)}
+    .update-item time{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+
+    /* Footer */
+    footer{margin-top:20px;text-align:center;color:var(--muted);font-size:14px;padding:8px}
+    .credits{margin-top:10px;color:var(--muted);font-size:13px}
+
+    /* Modal */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:9999;
+    }
+    .modal{
+      width:94%;
+      max-width:520px;
+      background:var(--card);
+      border-radius:14px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,0.25);
+    }
+    .modal h3{margin:0 0 10px 0}
+    .don-options{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+    .don-options .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .close{background:#fff;border:1px solid rgba(0,0,0,0.06);padding:8px 12px;border-radius:10px;cursor:pointer}
+
+    /* tiny helpers */
+    .muted-2{color:#6d6d6d;font-size:13px}
+    .label{font-weight:700;color:#4a3a3a;font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- HERO -->
+    <header class="hero">
+      <div class="left">
+        <h1>Ayudemos a <span style="color:var(--cta)">Isabella</span> a recuperar su sonrisa</h1>
+        <p class="lead">Isabella Valentina Escalante Velásquez necesita nuestro apoyo para costear estudios y tratamientos que permitan encontrar un diagnóstico y darle la atención que merece.</p>
+        <div class="cta-row">
+          <button class="btn btn-donar" id="openDonate">💖 Donar ahora</button>
+          <a class="btn btn-secondary" href="#updates">Ver actualizaciones</a>
+          <a class="btn btn-secondary" href="mailto:genesisvelasquez1989@gmail.com">Contactar a la mamá</a>
+        </div>
+        <p style="margin-top:12px" class="muted">Gracias por compartir y por cada ayuda — cualquier aporte, por pequeño que sea, suma mucho.</p>
+      </div>
+      <div class="img">
+        <img src="assets/photo-hero.jpg" alt="Isabella" />
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+      <!-- COLUMNA IZQUIERDA: Historia, video, updates -->
+      <section>
+        <!-- Historia -->
+        <div class="card history">
+          <div class="section-title"><h2>La historia de Isabella</h2></div>
+          <div style="margin-bottom:10px" class="muted">Actualizado por Génesis Velásquez</div>
+
+          <!-- Texto emocional en español venezolano -->
+          <p>
+            Isabella Valentina Escalante Velásquez nació con complicaciones que empezaron aún antes de su nacimiento. A las 38 semanas la mamá perdió líquido amniótico y, por una incompatibilidad de factor (Génesis es O-), Isabella necesitó transfusiones muy delicadas: una transfusión exsanguinotransfusional que cambió su sangre para salvarle la vida.
+          </p>
+          <p>
+            Desde entonces ha sido atendida por genetistas, cardiólogo, neumonólogo y otorrino, pero todavía no han logrado un diagnóstico definitivo. Isabella tiene 1 año y 11 meses y presenta dificultades para aumentar de peso y talla, hipertonía y retraso motor. Hoy está hospitalizada en el Hospital Israel Ranuárez Balza por una infección respiratoria que ha complicado su respiración.
+          </p>
+          <p>
+            Los médicos han pedido una batería de exámenes —muchos de ellos genéticos y de alta complejidad— que son muy costosos. Los estudios diarios y el tratamiento requieren recursos que la familia no tiene en este momento. Por eso pedimos tu ayuda: para cubrir exámenes, medicamentos y la atención médica que Isabella necesita urgentemente.
+          </p>
+
+          <!-- Video -->
+          <div style="margin-top:12px" class="media-wrap">
+            <video controls playsinline poster="assets/photo-hero.jpg">
+              <source src="assets/video.mp4" type="video/mp4">
+              Tu navegador no soporta video. Puedes ver el video en el enlace compartido por la familia.
+            </video>
+
+            <!-- segunda foto -->
+            <img src="assets/photo-2.jpg" alt="Isabella con su osito" />
+          </div>
+        </div>
+
+        <!-- ACTUALIZACIONES -->
+        <div id="updates" class="card" style="margin-top:14px;">
+          <div class="section-title"><h2>Actualizaciones de Isabella</h2></div>
+          <div class="muted">Aquí compartiremos noticias, resultados y fotos a medida que la familia las suba.</div>
+
+          <!-- Lista de actualizaciones (guardadas en localStorage; la familia puede editar el código o usar el formulario abajo) -->
+          <div style="margin-top:12px" class="updates-list" id="updatesList">
+            <div class="update-item">
+              <time>16 oct 2025</time>
+              <div>Próximamente compartiremos avances, resultados de los exámenes y fotos de la evolución de Isabella. Gracias por acompañarnos.</div>
+            </div>
+          </div>
+
+          <!-- Formulario simple para agregar actualización (visible solo si abres el sitio desde la computadora) -->
+          <div style="margin-top:12px">
+            <textarea id="newUpdate" placeholder="Escribe una actualización breve..." style="width:100%;min-height:70px;padding:10px;border-radius:10px;border:1px solid #eee"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="btn btn-secondary" id="addUpdateBtn">Agregar actualización</button>
+              <button class="btn" id="clearUpdates" style="background:#fff;border:1px solid #f1f1f1">Limpiar historial (solo local)</button>
+            </div>
+            <div style="margin-top:8px" class="muted-2">Nota: las actualizaciones se guardan localmente en este navegador. Si deseas que sean públicas permanentemente, dime y te oriento cómo integrar un panel simple con Netlify Forms o subir manualmente aquí.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COLUMNA DERECHA: Donaciones y contacto -->
+      <aside>
+        <div class="card">
+          <div class="section-title"><h2>Cómo ayudar</h2></div>
+          <p class="muted">Selecciona la opción más cómoda. Gracias por tu generosidad.</p>
+
+          <!-- Pago móvil Venezuela -->
+          <div class="donation-method">
+            <div class="icon">VE</div>
+            <div class="info">
+              <small>Pago Móvil (Venezuela)</small>
+              <div class="data">Banco de Venezuela · C.I.: <strong>18.043.857</strong></div>
+              <div class="copy-row">
+                <button class="small-btn copy-btn" data-copy="18.043.857">Copiar C.I.</button>
+                <button class="small-btn whatsapp-btn" id="waPagoMovil">Enviar WhatsApp</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cuenta bancaria Argentina -->
+          <div class="donation-method">
+            <div class="icon">AR</div>
+            <div class="info">
+              <small>Cuenta bancaria (Argentina)</small>
+              <div class="data">CBU: <strong id="cbuText">0070019130004057932719</strong></div>
+              <div class="copy-row">
+                <button class="small-btn copy-btn" data-copy="0070019130004057932719">Copiar CBU</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PayPal -->
+          <div class="donation-method">
+            <div class="icon">PP</div>
+            <div class="info">
+              <small>Donación internacional</small>
+              <div class="data">PayPal: <strong>paypal.me/geneluisa</strong></div>
+              <div class="copy-row">
+                <a class="small-btn mailto" href="https://www.paypal.me/geneluisa" target="_blank" rel="noopener">Ir a PayPal</a>
+                <button class="small-btn copy-btn" data-copy="https://www.paypal.me/geneluisa">Copiar enlace</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contacto -->
+          <div style="margin-top:10px" class="section-title"><h2>Contacto</h2></div>
+          <div class="muted">Para consultas o enviar comprobantes:</div>
+          <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div class="label">Génesis Velásquez</div>
+                <div class="muted-2">Madre de Isabella</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <a class="small-btn whatsapp-btn" id="waContact">WhatsApp: +58 412 824 7639</a>
+              <a class="small-btn mailto" href="mailto:genesisvelasquez1989@gmail.com">genesisvelasquez1989@gmail.com</a>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button class="btn btn-donar" id="openDonate2">💖 Donar ahora</button>
+            <a class="btn btn-secondary" href="#history" onclick="document.querySelector('main section').scrollIntoView({behavior:'smooth'})">Leer historia</a>
+          </div>
+        </div>
+
+        <!-- Pequena nota legal / agradecimiento -->
+        <div style="margin-top:12px" class="card">
+          <div class="muted-2">Gracias por leer la historia de Isabella</div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <div>Gracias por tu apoyo y tus oraciones por Isabella 💖</div>
+      <div class="credits">Creado con amor · Contacto: genesisvelasquez1989@gmail.com</div>
+    </footer>
+  </div>
+
+  <!-- Modal de donación -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Donar a Isabella</h3>
+      <p class="muted-2">Elige la forma de donar.</p>
+
+      <div class="don-options">
+        <div class="row">
+          <div style="flex:1">
+            <div class="label">Pago Móvil (Venezuela)</div>
+            <div class="muted-2">Banco de Venezuela · C.I. 18.043.857</div>
+          </div>
+          <div>
+            <button class="btn btn-secondary" data-copy="18.043.857">Copiar C.I.</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div style="flex:1">
+            <div class="label">Cuenta Argentina (CBU)</div>
+            <div class="muted-2">0070019130004057932719</div>
+          </div>
+          <div>
+            <button class="btn btn-secondary" data-copy="0070019130004057932719">Copiar CBU</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div style="flex:1">
+            <div class="label">PayPal</div>
+            <div class="muted-2">https://www.paypal.me/geneluisa</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <a class="btn btn-donar" href="https://www.paypal.me/geneluisa" target="_blank" rel="noopener">Ir a PayPal</a>
+            <button class="btn btn-secondary" data-copy="https://www.paypal.me/geneluisa">Copiar enlace</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="close" id="closeModal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ============================
+       Comportamiento (copiar, modal, updates)
+       ============================ */
+
+    // Modal
+    const modal = document.getElementById('modal');
+    document.getElementById('openDonate').onclick = () => { modal.style.display='flex'; }
+    document.getElementById('openDonate2').onclick = () => { modal.style.display='flex'; }
+    document.getElementById('closeModal').onclick = () => { modal.style.display='none'; }
+    window.addEventListener('click', (e) => { if(e.target === modal) modal.style.display='none'; });
+
+    // Copiar al portapapeles
+    function copyText(text){
+      if(!navigator.clipboard) {
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try{ document.execCommand('copy'); alert('Copiado: ' + text); } catch(e){ alert('No se pudo copiar'); }
+        document.body.removeChild(ta);
+        return;
+      }
+      navigator.clipboard.writeText(text).then(()=>{
+        // pequeña confirmación
+        const msg = document.createElement('div');
+        msg.textContent = 'Copiado al portapapeles';
+        msg.style.position='fixed';
+        msg.style.right='18px';
+        msg.style.bottom='18px';
+        msg.style.background='rgba(0,0,0,0.75)';
+        msg.style.color='#fff';
+        msg.style.padding='8px 12px';
+        msg.style.borderRadius='8px';
+        document.body.appendChild(msg);
+        setTimeout(()=>msg.remove(),1500);
+      }, ()=> alert('No se pudo copiar'));
+    }
+
+    document.querySelectorAll('[data-copy]').forEach(btn=>{
+      btn.addEventListener('click',()=>copyText(btn.getAttribute('data-copy')));
+    });
+
+    // Botones WhatsApp
+    const waPhone = '+584128247639';
+    document.getElementById('waContact').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const text = encodeURIComponent('Hola Génesis, vi la campaña de Isabella y quiero comunicarme.');
+      window.open('https://wa.me/' + waPhone.replace(/\D/g,'') + '?text=' + text, '_blank');
+    });
+    document.getElementById('waPagoMovil').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const text = encodeURIComponent('Hola, quiero hacer un pago móvil para Isabella. ¿Me confirmas los pasos?');
+      window.open('https://wa.me/' + waPhone.replace(/\D/g,'') + '?text=' + text, '_blank');
+    });
+
+    // Actualizaciones: guardar en localStorage
+    const updatesList = document.getElementById('updatesList');
+    const addUpdateBtn = document.getElementById('addUpdateBtn');
+    const newUpdate = document.getElementById('newUpdate');
+    const clearUpdates = document.getElementById('clearUpdates');
+
+    function renderUpdates(){
+      // inicia con el elemento por defecto si no hay nada
+      const raw = localStorage.getItem('isabella_updates');
+      let arr = raw ? JSON.parse(raw) : [];
+      // si no hay nada, mantenemos el primer mensaje (ya en HTML), pero si hay items, los mostramos
+      updatesList.innerHTML = '';
+      if(arr.length === 0){
+        const el = document.createElement('div');
+        el.className='update-item';
+        el.innerHTML = '<time>16 oct 2025</time><div>Próximamente compartiremos avances, resultados de los exámenes y fotos de la evolución de Isabella. Gracias por acompañarnos.</div>';
+        updatesList.appendChild(el);
+        return;
+      }
+      arr.forEach(u=>{
+        const el = document.createElement('div');
+        el.className='update-item';
+        const t = new Date(u.date);
+        el.innerHTML = '<time>'+ t.toLocaleDateString('es-VE', {day:'2-digit', month:'short', year:'numeric'}) +'</time><div>'+ (u.text.replace(/\n/g,'<br>')) +'</div>';
+        updatesList.appendChild(el);
+      });
+    }
+
+    addUpdateBtn.addEventListener('click', ()=>{
+      const text = newUpdate.value && newUpdate.value.trim();
+      if(!text) return alert('Escribe una actualización antes de agregarla.');
+      const raw = localStorage.getItem('isabella_updates');
+      const arr = raw ? JSON.parse(raw) : [];
+      arr.unshift({text, date: new Date()});
+      localStorage.setItem('isabella_updates', JSON.stringify(arr));
+      newUpdate.value='';
+      renderUpdates();
+    });
+
+    clearUpdates.addEventListener('click', ()=>{
+      if(confirm('¿Eliminar todas las actualizaciones guardadas localmente?')) {
+        localStorage.removeItem('isabella_updates');
+        renderUpdates();
+      }
+    });
+
+    renderUpdates();
+
+    // Mejora: evitar que links se abran en la misma pestaña en Netlify (ya usamos target=_blank cuando aplica)
+  </script>
+</body>
+</html>
