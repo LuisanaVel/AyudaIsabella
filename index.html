@@ -312,7 +312,7 @@
               <button class="btn btn-secondary" id="addUpdateBtn">Agregar actualización</button>
               <button class="btn" id="clearUpdates" style="background:#fff;border:1px solid #f1f1f1">Limpiar historial (solo local)</button>
             </div>
-            <div style="margin-top:8px" class="muted-2">Nota: las actualizaciones se guardan localmente en este navegador. Si deseas que sean públicas permanentemente, dime y te oriento cómo integrar un panel simple con Netlify Forms o subir manualmente aquí.</div>
+            <div style="margin-top:8px" class="muted-2"></div>
           </div>
         </div>
       </section>
@@ -535,13 +535,6 @@
       localStorage.setItem('isabella_updates', JSON.stringify(arr));
       newUpdate.value='';
       renderUpdates();
-    });
-
-    clearUpdates.addEventListener('click', ()=>{
-      if(confirm('¿Eliminar todas las actualizaciones guardadas localmente?')) {
-        localStorage.removeItem('isabella_updates');
-        renderUpdates();
-      }
     });
 
     renderUpdates();
